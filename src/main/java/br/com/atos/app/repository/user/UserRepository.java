@@ -7,4 +7,6 @@ import br.com.atos.app.model.user.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
+
+    boolean existsByName(String name);
 }
