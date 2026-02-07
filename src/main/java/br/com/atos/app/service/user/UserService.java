@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.atos.app.dto.user.UserRequestDTO;
 import br.com.atos.app.dto.user.UserResponseDTO;
-import br.com.atos.app.exception.BussinesException;
+import br.com.atos.app.exception.BusinessException;
 import br.com.atos.app.model.user.User;
 import br.com.atos.app.repository.user.UserRepository;
 
@@ -61,7 +61,7 @@ public class UserService {
 
     public UserResponseDTO listarUsuarioPorId(Long id){
         User usuarioEncontrado = userRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+            .orElseThrow(() -> new BusinessException("Usuário não encontrado"));
         UserResponseDTO usuario = new UserResponseDTO(
             usuarioEncontrado.getId(),
             usuarioEncontrado.getName()
@@ -71,7 +71,7 @@ public class UserService {
 
     public UserResponseDTO atualizarUsuario(Long id, UserRequestDTO user){
         User usuarioEncontrado = userRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+            .orElseThrow(() -> new BusinessException("Usuário não encontrado"));
         usuarioEncontrado.setName(user.name());
         usuarioEncontrado.setPassword(encryptPassword(user.password()));
         userRepository.save(usuarioEncontrado);
@@ -84,10 +84,10 @@ public class UserService {
 
     public void deletarUsuario(Long id){
         if(id == null){
-            throw new BussinesException("Identificador inválido.");
+            throw new BusinessException("Identificador inválido.");
         }
         if(!userRepository.existsById(id)){
-            throw new BussinesException("Usuário não encontrado");
+            throw new BusinessException("Usuário não encontrado");
         }else {
             userRepository.deleteById(id);
         }
