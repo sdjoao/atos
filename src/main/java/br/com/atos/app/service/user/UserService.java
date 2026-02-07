@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.atos.app.dto.user.UserRequestDTO;
 import br.com.atos.app.dto.user.UserResponseDTO;
+import br.com.atos.app.exception.BussinesException;
 import br.com.atos.app.model.user.User;
 import br.com.atos.app.repository.user.UserRepository;
 
@@ -79,5 +80,16 @@ public class UserService {
             usuarioEncontrado.getName()
         );
         return usuarioAtualizado;
+    }
+
+    public void deletarUsuario(Long id){
+        if(id == null){
+            throw new BussinesException("Identificador inválido.");
+        }
+        if(!userRepository.existsById(id)){
+            throw new BussinesException("Usuário não encontrado");
+        }else {
+            userRepository.deleteById(id);
+        }
     }
 }
